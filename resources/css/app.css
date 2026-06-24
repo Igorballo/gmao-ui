@@ -1,0 +1,52 @@
+@import 'tailwindcss';
+
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark;
+}
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+body {
+    font-family: var(--font-sans);
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+/* Texte toujours blanc sur les boutons de suppression (à tous les niveaux) */
+.btn-error {
+    color: #ffffff;
+}
+
+@layer base {
+    /* Curseur "main" sur les éléments interactifs non couverts par daisyUI */
+    [role='button'],
+    summary,
+    label[for],
+    a[href] {
+        cursor: pointer;
+    }
+
+    /* Scrollbars discrètes (suivent le thème) */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-base-300) transparent;
+    }
+    *::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    *::-webkit-scrollbar-thumb {
+        background-color: var(--color-base-300);
+        border-radius: 9999px;
+    }
+}

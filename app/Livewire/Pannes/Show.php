@@ -6,6 +6,7 @@ use App\Enums\StatutMachine;
 use App\Enums\StatutPanne;
 use App\Enums\TypePhoto;
 use App\Models\Panne;
+use App\Services\PanneNotifier;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -77,6 +78,8 @@ class Show extends Component
 
         // La machine est mise à l'arrêt pendant l'intervention
         $this->panne->machine->update(['statut' => StatutMachine::Arret]);
+
+        app(PanneNotifier::class)->interventionDemarree($this->panne, auth()->user());
 
         $this->rafraichir();
         $this->dispatch('notify', message: 'Intervention démarrée. Machine mise à l\'arrêt.', type: 'success');
@@ -160,6 +163,8 @@ class Show extends Component
 
         // La machine repasse en service
         $this->panne->machine->update(['statut' => StatutMachine::Actif]);
+
+        app(PanneNotifier::class)->interventionCloturee($this->panne, auth()->user());
 
         $this->rafraichir();
         $this->dispatch('notify', message: 'Intervention clôturée. Machine remise en service.', type: 'success');

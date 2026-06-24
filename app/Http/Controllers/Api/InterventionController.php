@@ -9,10 +9,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PanneResource;
 use App\Models\Intervention;
 use App\Models\Panne;
+use App\Services\PanneNotifier;
 use Illuminate\Http\Request;
 
 class InterventionController extends Controller
 {
+    public function __construct(protected PanneNotifier $notifier) {}
+
     protected array $relations = [
         'machine', 'responsable', 'declarePar', 'intervenants',
         'intervention.maintenancier', 'intervention.pieces', 'intervention.photos',
@@ -46,6 +49,7 @@ class InterventionController extends Controller
             ]);
             $panne->update(['statut' => StatutPanne::EnCours]);
             $panne->machine->update(['statut' => StatutMachine::Arret]);
+            $this->notifier->interventionDemarree($panne, $request->user());
         }
 
         return $this->reponse($panne);
@@ -103,6 +107,8 @@ class InterventionController extends Controller
         $intervention->update(['terminee_le' => now()]);
         $intervention->panne->update(['statut' => StatutPanne::Cloturee]);
         $intervention->panne->machine->update(['statut' => StatutMachine::Actif]);
+
+        $this->notifier->interventionCloturee($intervention->panne, $request->user());
 
         return $this->reponse($intervention->panne);
     }

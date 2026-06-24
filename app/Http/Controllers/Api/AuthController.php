@@ -131,6 +131,21 @@ class AuthController extends Controller
     }
 
     /**
+     * Préférences de notifications push.
+     */
+    public function updateNotifications(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'push_enabled' => ['required', 'boolean'],
+        ]);
+
+        $user = $request->user();
+        $user->update(['push_enabled' => $data['push_enabled']]);
+
+        return response()->json($this->profil($user->fresh(), $request));
+    }
+
+    /**
      * Déconnexion : révoque le token courant.
      */
     public function logout(Request $request): JsonResponse
@@ -156,6 +171,7 @@ class AuthController extends Controller
                 ? $host.'/storage/'.$user->photo
                 : null,
             'actif' => $user->actif,
+            'push_enabled' => $user->push_enabled,
             'roles' => $user->getRoleNames(),
             'permissions' => $user->getAllPermissions()->pluck('name'),
         ];

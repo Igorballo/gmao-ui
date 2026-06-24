@@ -28,6 +28,7 @@ class User extends Authenticatable
         'telephone',
         'photo',
         'actif',
+        'push_enabled',
         'password',
     ];
 
@@ -52,6 +53,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'actif' => 'boolean',
+            'push_enabled' => 'boolean',
         ];
     }
 
@@ -73,5 +75,11 @@ class User extends Authenticatable
     public function interventions(): HasMany
     {
         return $this->hasMany(Intervention::class, 'maintenancier_id');
+    }
+
+    /** Tokens push Expo enregistrés pour cet utilisateur. */
+    public function deviceTokens(): HasMany
+    {
+        return $this->hasMany(DeviceToken::class);
     }
 }

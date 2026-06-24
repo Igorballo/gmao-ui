@@ -6,6 +6,7 @@ use App\Enums\StatutPanne;
 use App\Models\Machine;
 use App\Models\Panne;
 use App\Models\User;
+use App\Services\PanneNotifier;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
@@ -119,13 +120,14 @@ class Index extends Component
             $message = 'Panne mise à jour.';
             $type = 'info';
         } else {
-            Panne::create([
+            $panne = Panne::create([
                 'machine_id' => $this->machine_id,
                 'declaree_par_id' => auth()->id(),
                 'date_panne' => Carbon::parse($this->date_panne),
                 'description' => $this->description,
                 'statut' => StatutPanne::EnAttente,
             ]);
+            app(PanneNotifier::class)->panneSignalee($panne, auth()->user());
             $message = 'Panne signalée avec succès.';
             $type = 'success';
         }
@@ -177,6 +179,8 @@ class Index extends Component
             'deadline' => Carbon::parse($this->deadline),
             'statut' => $panne->statut === StatutPanne::EnAttente ? StatutPanne::Assignee : $panne->statut,
         ]);
+
+        app(PanneNotifier::class)->panneAssignee($panne, auth()->user());
 
         $this->showDelegateModal = false;
         $this->reset(['delegatePanneId', 'intervenants', 'responsable_id', 'deadline']);

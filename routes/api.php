@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Api\AccueilController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DeviceTokenController;
 use App\Http\Controllers\Api\InterventionController;
 use App\Http\Controllers\Api\MachineController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\PanneController;
 use App\Http\Controllers\Api\RapportController;
 use App\Http\Controllers\Api\UserController;
@@ -18,7 +20,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/me', [AuthController::class, 'update']);
     Route::post('/me/photo', [AuthController::class, 'uploadPhoto']);
     Route::post('/me/password', [AuthController::class, 'updatePassword']);
+    Route::patch('/me/notifications', [AuthController::class, 'updateNotifications']);
+    Route::post('/me/device-token', [DeviceTokenController::class, 'store']);
+    Route::delete('/me/device-token', [DeviceTokenController::class, 'destroy']);
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/notifications/unread-count', [NotificationController::class, 'unreadCount']);
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead']);
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markRead']);
 
     Route::get('/accueil', [AccueilController::class, 'index']);
 

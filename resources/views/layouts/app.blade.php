@@ -90,7 +90,7 @@
                 <h1 class="truncate text-xl font-bold tracking-tight">{{ $pageTitle }}</h1>
             </div>
 
-            <div class="navbar-end gap-2">
+            <div class="navbar-end items-center gap-1 sm:gap-2">
                 <label class="input input-sm hidden w-64 items-center gap-2 md:flex">
                     <svg class="h-4 w-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.34-4.34M17 10.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0Z"/></svg>
                     <input type="search" placeholder="Rechercher…" />
@@ -108,9 +108,7 @@
                     <svg x-show="dark" x-cloak class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"/></svg>
                 </button>
 
-                <button type="button" class="btn btn-ghost btn-circle" aria-label="Notifications">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"/></svg>
-                </button>
+                <livewire:notifications.bell />
 
                 {{-- Avatar + menu --}}
                 <div class="dropdown dropdown-end">

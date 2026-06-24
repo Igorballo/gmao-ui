@@ -6,12 +6,15 @@ use App\Enums\StatutPanne;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PanneResource;
 use App\Models\Panne;
+use App\Services\PanneNotifier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
 class PanneController extends Controller
 {
+    public function __construct(protected PanneNotifier $notifier) {}
+
     public function index(Request $request)
     {
         abort_unless($request->user()->can('pannes.consulter'), 403);
@@ -42,6 +45,8 @@ class PanneController extends Controller
             'description' => $data['description'],
             'statut' => StatutPanne::EnAttente,
         ]);
+
+        $this->notifier->panneSignalee($panne, $request->user());
 
         return (new PanneResource($panne->load('machine')))
             ->response()
@@ -79,6 +84,8 @@ class PanneController extends Controller
             'deadline' => Carbon::parse($data['deadline']),
             'statut' => $panne->statut === StatutPanne::EnAttente ? StatutPanne::Assignee : $panne->statut,
         ]);
+
+        $this->notifier->panneAssignee($panne, $request->user());
 
         $panne->load([
             'machine', 'responsable', 'declarePar', 'intervenants',
